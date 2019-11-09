@@ -64,31 +64,48 @@ print(len(counted_vals))
 
 # Plotting all v,s,s
 fig, ax = plt.subplots(1, 3)
-sns.heatmap(v[:, :], cmap=cmap, vmin=-0.15, vmax=0.15, ax=ax[0])
-# sns.heatmap(v[:, :], center=0, cmap=cmap, ax = ax[0])
-# sns.heatmap(v[:, :], cmap=cmap, ax = ax[0])
-sns.heatmap(u[:, :], cmap=cmap, vmin=-0.10, vmax=0.10, ax=ax[1])
-sns.heatmap(s[:10, :10], cmap=cmap, center=0, ax=ax[2])
+ax0 = sns.heatmap(v[:, :], cmap=cmap, vmin=-0.15, vmax=0.15, ax=ax[0])
+ax1 = sns.heatmap(u[:, :], cmap=cmap, vmin=-0.10, vmax=0.10, ax=ax[1])
+ax2 = sns.heatmap(s[:, :], cmap=cmap, center=0, ax=ax[2])
+ax0.title.set_text('V Transposed Matrix')
+ax1.title.set_text('U Matrix')
+ax2.title.set_text('S Matrix')
 plt.show()
 
 # plotting v
 sns.heatmap(v[:, :], cmap=cmap, vmin=-0.15, vmax=0.15)
+plt.title("V Transposed Matrix")
 plt.show()
 
 # plotting first 5 rows
 sns.heatmap(v[0:5, :], cmap=cmap, center=0)
+plt.title("V Transposed Matrix First 5 rows")
 plt.show()
 
-# pulling second row from v
+# pulling row from v
 v_df = pd.DataFrame(v[v_row, :])
 v_df[column_of_interest] = df_final_wide.loc[:, column_of_interest]
-sns.boxplot(x=v_df.loc[:, column_of_interest], y=v_df.iloc[:, 0])
-plt.show()
 
-# v_df.ajcc_nodes_pathologic_pn.value_counts()
+# Calculation the counts and medians for column_of_interest
+medians = v_df.groupby(column_of_interest).median().values
+column_of_interest_counts = v_df[column_of_interest].value_counts().values
+column_of_interest_counts = [str(x) for x in column_of_interest_counts.tolist()]
+column_of_interest_counts = ["n= " + i for i in column_of_interest_counts]
 
 # running stats Mann Whitney
 temp_stats = scipy.stats.mannwhitneyu(
     x=v_df[v_df.loc[:, column_of_interest] == v_df.loc[:, column_of_interest].unique()[0]].iloc[:, 0],
     y=v_df[v_df.loc[:, column_of_interest] == v_df.loc[:, column_of_interest].unique()[0]].iloc[:, 0])
 print(temp_stats)
+
+# Making boxplot
+temp_bp = sns.boxplot(x=v_df.loc[:, column_of_interest], y=v_df.iloc[:, 0])
+pos = range(len(column_of_interest_counts))
+tick = 0
+label = 0
+for tick, label in zip(pos, temp_bp.get_xticklabels()):
+    temp_bp.text(pos[tick], medians[tick] + 0.03, column_of_interest_counts[tick],
+                 ha='center', fontsize=12, color='w', weight='semibold')
+temp_bp.set(ylabel=f"V of {column_of_interest}, Row: {v_row}", title=f"Boxplot of {column_of_interest}")
+temp_bp.text(x=-0.3, y=-0.3, s=f"p={temp_stats[1]}", fontsize=10, ha='center', va='bottom')
+plt.show()
