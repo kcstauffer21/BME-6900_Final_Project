@@ -128,7 +128,3 @@ def plot_run_svd(data, column_of_interest, v_row):
         print(temp_stats)
 
 
-# i = 0
-for i in range(len(df_final_wide.columns)):
-    for j in range(len(df_final_wide)):
-        plot_run_svd(df_final_wide, df_final_wide.columns[12046:][i], j)

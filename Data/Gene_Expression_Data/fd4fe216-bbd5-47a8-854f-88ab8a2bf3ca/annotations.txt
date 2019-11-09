@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+05f490f0-6924-5cbb-968e-6312f7c00fd4	11935	case	c70a5975-c37b-47cc-9113-427a754807d8	Neoadjuvant therapy	Notification	2012-11-10T00:00:00	Approved	Patient received neo-adjuvant treatment prior to resection of TCGA tumor per enrollment form.

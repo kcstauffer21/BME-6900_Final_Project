@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+76fb9ebd-1589-5e66-8372-dc4a17989b27	1038	case	0ab8d063-62b4-4d47-82aa-e3351a60029d	Prior malignancy	Notification	2010-12-06T00:00:00	Approved	[intgen.org]: Subject has Hx of prior malignancy
+f98e0a0a-ac30-5696-9e7b-1f56771af577	20735	case	0ab8d063-62b4-4d47-82aa-e3351a60029d	History of unacceptable prior treatment related to a prior/other malignancy	Notification	2014-06-16T00:00:00	Approved	unknown treatment history

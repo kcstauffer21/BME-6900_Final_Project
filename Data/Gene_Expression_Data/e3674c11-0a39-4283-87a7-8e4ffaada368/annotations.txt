@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+5bd74ca8-27c4-56ff-b4f5-390298b5f8b0	11922	case	4e1ad82e-23c8-44bb-b74e-a3d0b1126b96	History of acceptable prior treatment related to a prior/other malignancy	Notification	2012-11-10T00:00:00	Approved	Prior malignancy R tongue treated with radiation.
+43074507-19cc-569c-9518-022654241c6a	11710	case	4e1ad82e-23c8-44bb-b74e-a3d0b1126b96	Prior malignancy	Notification	2012-10-31T00:00:00	Approved	Prior malignancy R tongue treated with radiation.
