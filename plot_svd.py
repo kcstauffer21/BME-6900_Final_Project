@@ -111,7 +111,7 @@ def plot_run_svd(data, column_of_interest, v_row):
     if len(data.loc[:, column_of_interest].unique()) == 2:
         temp_stats = scipy.stats.mannwhitneyu(
             x=v_df[v_df.loc[:, column_of_interest] == v_df.loc[:, column_of_interest].unique()[0]].iloc[:, 0],
-            y=v_df[v_df.loc[:, column_of_interest] == v_df.loc[:, column_of_interest].unique()[0]].iloc[:, 0])
+            y=v_df[v_df.loc[:, column_of_interest] == v_df.loc[:, column_of_interest].unique()[1]].iloc[:, 0])
 
     # Making boxplot
     if temp_stats[1] < 0.05:
@@ -206,6 +206,6 @@ def plot_run_svd_all(data, columns_of_interest):
                     print(temp_stats)
 
 
-# plot_run_svd(df_final_wide, 'gender', 1)
+plot_run_svd(df_final_wide, 'node_metastasis_yes_no', 1)
 
-plot_run_svd_all(df_final_wide, df_final_wide.columns[12046:])
+# plot_run_svd_all(df_final_wide, df_final_wide.columns[12046:])
