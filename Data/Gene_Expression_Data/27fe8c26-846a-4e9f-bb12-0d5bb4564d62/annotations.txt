@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+31e4ad04-e845-59e2-80dd-52284248aaac	11960	case	f3e67161-1532-4b50-a9b5-0da80410c4d7	History of unacceptable prior treatment related to a prior/other malignancy	Notification	2012-11-10T00:00:00	Approved	Prior malignancy of the larynx treated w/ chemotherapy  and radiation.
+73dd1e0f-6aab-5984-8209-cff9b8415690	663	case	f3e67161-1532-4b50-a9b5-0da80410c4d7	Prior malignancy	Notification	2010-09-02T00:00:00	Approved	[intgen.org]: Prior Malignancy

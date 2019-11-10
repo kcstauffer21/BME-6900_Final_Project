@@ -1,0 +1,4 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+6ef5c71f-ea3c-55dc-8550-37d1b67606d7	11958	case	f355cd59-eaa9-46c7-ab07-b90a7afc875c	History of unacceptable prior treatment related to a prior/other malignancy	Notification	2012-11-10T00:00:00	Approved	Prior malignancy  L breast cancer treated w/ locoregional radiation (TCGA tumor is in L upper lobe of lung)
+1240dcbc-c58b-56c5-83a1-2bb1bc9e4b37	743	case	f355cd59-eaa9-46c7-ab07-b90a7afc875c	Prior malignancy	Notification	2010-10-11T00:00:00	Approved	[intgen.org]: Subject has Hx of prior malignancy
+db4acac7-abc7-5a9b-87c8-5134f318147a	17250	case	f355cd59-eaa9-46c7-ab07-b90a7afc875c	General	Observation	2013-09-05T00:00:00	Approved	This subject was duplicated by TCGA-O2-A5IC; TCGA-O2-A5IC was redacted and this one retained

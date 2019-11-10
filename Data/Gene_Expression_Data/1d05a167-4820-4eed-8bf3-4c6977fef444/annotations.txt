@@ -1,0 +1,3 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+bfb5d173-4061-508e-bbb8-12faa3829974	658	case	cee6e9f6-6d7e-4096-a9bc-2cce004fb218	Prior malignancy	Notification	2010-09-02T00:00:00	Approved	[intgen.org]: Prior Malignancy
+309745e2-4989-5faf-8e3f-89329c79c574	11938	case	cee6e9f6-6d7e-4096-a9bc-2cce004fb218	History of acceptable prior treatment related to a prior/other malignancy	Notification	2012-11-10T00:00:00	Approved	Prior malignancy  bladder cancer treated w/ locoregional radiation.

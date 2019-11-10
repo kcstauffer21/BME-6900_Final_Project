@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+225dd3cc-f361-5f72-b721-40ce47845b1b	739	case	acae4e48-57de-40c5-9ae5-4386144ebaea	Prior malignancy	Notification	2010-10-11T00:00:00	Approved	[intgen.org]: Subject has Hx of prior malignancy
