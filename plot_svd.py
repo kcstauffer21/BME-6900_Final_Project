@@ -54,8 +54,10 @@ df_final_wide.loc[~(df_final_wide.loc[:, "ajcc_nodes_pathologic_pn"] == 'N0'), '
 # Replacing all [Not Available] with na's
 df_final_wide = df_final_wide.replace("[Not Available]", np.nan)
 
-
 # -------------------------------------------------------------------------------------Running SVD and Plots
+data = df_final_wide
+columns_of_interest = df_final_wide.columns[12046:]
+
 
 def plot_run_svd_all(data, columns_of_interest):
     """
@@ -80,11 +82,9 @@ def plot_run_svd_all(data, columns_of_interest):
 
             # running svd
             u, s, v = np.linalg.svd(df_svd, full_matrices=False)
-            s = np.diag(s)
 
-            for j in range(len(v[:, 0])):
-                # print(f"j={j}")
-                range(len(v[:, 0]))
+            # Running statistics
+            for j in range(len(v[1:, 0])):
                 v_df = pd.DataFrame(v[j, :])
                 v_df[column_of_interest] = data.loc[:, column_of_interest]
                 # running stats
@@ -95,8 +95,8 @@ def plot_run_svd_all(data, columns_of_interest):
 
             min_pval = min(all_stats, key=all_stats.get)
             if all_stats[min_pval] < 0.05:
+                row_number = min_pval.split('_')[-1]
                 # Calculation the counts and medians for column_of_interest
-                medians = v_df.groupby(column_of_interest).median().values
                 column_of_interest_counts = v_df[column_of_interest].value_counts().values
                 column_of_interest_counts = [str(x) for x in column_of_interest_counts.tolist()]
                 column_of_interest_counts = ["n= " + i for i in column_of_interest_counts]
@@ -112,19 +112,6 @@ def plot_run_svd_all(data, columns_of_interest):
                              ha='center', va='bottom')
                 plt.show()
 
-                # Plotting all v,u,s
-                # fig, ax = plt.subplots(1, 3)
-                # ax0 = sns.heatmap(v[:, :], cmap=cmap, vmin=-0.15, vmax=0.15, ax=ax[0])
-                # ax1 = sns.heatmap(u[:, :], cmap=cmap, vmin=-0.10, vmax=0.10, ax=ax[1])
-                # ax2 = sns.heatmap(s[:, :], cmap=cmap, center=0, ax=ax[2])
-                # ax0.title.set_text('V Transposed Matrix')
-                # ax1.title.set_text('U Matrix')
-                # ax2.title.set_text('S Matrix')
-                # plt.show()
-
-                # saving figure
-                # plt.savefig(f"./Graphs/Heatmap_All_{column_of_interest}.png")
-
                 # plotting v
                 temp_v_heatmap = sns.heatmap(v[:, :], cmap=cmap, vmin=-0.15, vmax=0.15)
                 plt.title(f"V Transposed Matrix sorted by {column_of_interest}")
@@ -132,19 +119,31 @@ def plot_run_svd_all(data, columns_of_interest):
                 # Saving figure
                 temp_v_heatmap.figure.savefig(f"./Graphs/Heatmap_V_{column_of_interest}.png")
 
-                # plotting first 5 rows
-                # temp_v_heatmap_first_five = sns.heatmap(v[0:5, :], cmap=cmap, center=0)
-                # plt.title(f"V Transposed Matrix sorted by {column_of_interest} First 5 rows")
-                # plt.show()
-                # # Saving figure
-                # temp_v_heatmap_first_five.figure.savefig(f"./Graphs/Heatmap_V_1to5_{column_of_interest}.png")
-
                 # Saving figure
                 temp_bp.figure.savefig(f"./Graphs/bp_{min_pval}_.png")
-                # print(temp_stats)
+
+                # Doing U magic
+                u_df = pd.DataFrame(u)
+                u_df["Genes"] = data.transpose().index[1:12043]
+                u_df.sort_values(by=j, ascending=False, inplace=True)
+                sorted_genes = u_df.Genes
+                sorted_genes.to_csv(f"./Sorted U genes/U_sorted_Row_{row_number}_{column_of_interest}.csv", index=False)
+
+                temp_u_heatmap = sns.heatmap(u[:, :], cmap=cmap, center=0)
+                plt.title(f"U Matrix Sorted by Row {row_number}")
+                plt.show()
+                # Saving figure
+                temp_u_heatmap.figure.savefig(f"./Graphs/Heatmap_U_{column_of_interest}_Row_{row_number}.png")
+
             else:
                 multiple_unique.append(column_of_interest)
                 print(f"Error on {column_of_interest}")
+
+    # Plotting sigma matrix
+    plt.plot(s[1:])
+    plt.title("Eigenvalue Decomposition (Sigma Matrix)")
+    plt.savefig('./Graphs/s_matrix.png', bbox_inches='tight')
+    plt.show()
 
     end_time = datetime.datetime.now()
     print(end_time - start_time)
