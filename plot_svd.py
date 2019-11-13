@@ -58,7 +58,6 @@ df_final_wide = df_final_wide.replace("[Not Available]", np.nan)
 data = df_final_wide
 columns_of_interest = df_final_wide.columns[12046:]
 
-
 def plot_run_svd_all(data, columns_of_interest):
     """
     :param data: Pass in the dataframe of interest
@@ -125,7 +124,12 @@ def plot_run_svd_all(data, columns_of_interest):
                 # Doing U magic
                 u_df = pd.DataFrame(u)
                 u_df["Genes"] = data.transpose().index[1:12043]
-                u_df.sort_values(by=j, ascending=False, inplace=True)
+                u_df.sort_values(by=int(row_number), ascending=True, inplace=True)
+                u_df.reset_index(inplace=True, drop=True)
+                plt.plot(u_df[int(row_number)], u_df.index)
+                plt.title(f"Gene Expression of U sorted by column: {row_number}")
+                plt.savefig(f'./Graphs/U_sortedby_{row_number}_gene_expression.png', bbox_inches='tight')
+                plt.show()
                 sorted_genes = u_df.Genes
                 sorted_genes.to_csv(f"./Sorted U genes/U_sorted_Row_{row_number}_{column_of_interest}.csv", index=False)
 
