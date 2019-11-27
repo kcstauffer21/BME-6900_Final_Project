@@ -58,6 +58,7 @@ df_final_wide = df_final_wide.replace("[Not Available]", np.nan)
 data = df_final_wide
 columns_of_interest = df_final_wide.columns[12046:]
 
+
 def plot_run_svd_all(data, columns_of_interest):
     """
     :param data: Pass in the dataframe of interest
@@ -67,6 +68,7 @@ def plot_run_svd_all(data, columns_of_interest):
     multiple_unique = list()
     start_time = datetime.datetime.now()
     for i in range(len(columns_of_interest)):
+        i = 1
         # print(f"i={i}")
         column_of_interest = columns_of_interest[i]
         all_stats = dict()
@@ -124,9 +126,10 @@ def plot_run_svd_all(data, columns_of_interest):
                 # Doing U magic
                 u_df = pd.DataFrame(u)
                 u_df["Genes"] = data.transpose().index[1:12043]
-                u_df.sort_values(by=int(row_number), ascending=True, inplace=True)
+                u_df.sort_values(by=int(row_number), ascending=False, inplace=True)
                 u_df.reset_index(inplace=True, drop=True)
-                plt.plot(u_df[int(row_number)], u_df.index)
+                sns.barplot(x=u_df[int(row_number)], y=u_df.index)
+                # .plot(u_df[int(row_number)], u_df.index)
                 plt.title(f"Gene Expression of U sorted by column: {row_number}")
                 plt.savefig(f'./Graphs/U_sortedby_{row_number}_gene_expression.png', bbox_inches='tight')
                 plt.show()
@@ -148,6 +151,20 @@ def plot_run_svd_all(data, columns_of_interest):
     plt.title("Eigenvalue Decomposition (Sigma Matrix)")
     plt.savefig('./Graphs/s_matrix.png', bbox_inches='tight')
     plt.show()
+
+    s_temp = pd.DataFrame(s)
+    temp_bar = sns.barplot(x=s_temp.index[1:], y=s_temp.iloc[1:, 0], data=s_temp, color='red')
+    plt.title("Eigenvalue Decomposition (Sigma Matrix)")
+    temp_bar.set(xlabel="Position", ylabel="Eigenvalue Decomposition")
+    plt.savefig('./Graphs/s_matrix_bar.png', bbox_inches='tight')
+    plt.show()
+
+    s_temp = np.diag(s)
+    sns.heatmap(s_temp[:, :], vmin=-0.65, vmax=0.65, cmap=cmap)
+    plt.title("Eigenvalue Decomposition (Sigma Matrix)")
+    plt.savefig('./Graphs/s_matrix_heatmap.png', bbox_inches='tight')
+    plt.show()
+
 
     end_time = datetime.datetime.now()
     print(end_time - start_time)
