@@ -131,7 +131,7 @@ def plot_run_svd_all(data, columns_of_interest):
                 u_df.reset_index(inplace=True, drop=True)
                 u_df["temp_index"] = u_df.index
                 print(f"Generating and saving{column_of_interest} barplot")
-                sns.barplot(x=u_df[row_number], y=u_df.temp_index)
+                sns.lineplot(x=u_df[row_number], y=u_df.temp_index)
                 plt.title(f"Gene Expression of U sorted by column: {row_number}")
                 plt.savefig(f'./Graphs/U_sorted_by_{row_number}_gene_expression.png', bbox_inches='tight')
                 print(f"Done saving barplot{column_of_interest}")
