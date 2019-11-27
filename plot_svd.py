@@ -55,8 +55,9 @@ df_final_wide.loc[~(df_final_wide.loc[:, "ajcc_nodes_pathologic_pn"] == 'N0'), '
 df_final_wide = df_final_wide.replace("[Not Available]", np.nan)
 
 # -------------------------------------------------------------------------------------Running SVD and Plots
-data = df_final_wide
-columns_of_interest = df_final_wide.columns[12046:]
+# data = df_final_wide
+# columns_of_interest = df_final_wide.columns[12046:]
+# i=2
 
 
 def plot_run_svd_all(data, columns_of_interest):
@@ -68,10 +69,10 @@ def plot_run_svd_all(data, columns_of_interest):
     multiple_unique = list()
     start_time = datetime.datetime.now()
     for i in range(len(columns_of_interest)):
-        i = 1
-        # print(f"i={i}")
         column_of_interest = columns_of_interest[i]
         all_stats = dict()
+        print(f"Started {column_of_interest}")
+
         if (len(data.loc[:, column_of_interest].unique()) == 2 and data.loc[:,
                                                                    column_of_interest].isna().sum() == 0) or (
                 len(data.loc[:, column_of_interest].unique()) == 3 and data.loc[:,
@@ -97,6 +98,7 @@ def plot_run_svd_all(data, columns_of_interest):
             min_pval = min(all_stats, key=all_stats.get)
             if all_stats[min_pval] < 0.05:
                 row_number = min_pval.split('_')[-1]
+                row_number = int(row_number)
                 # Calculation the counts and medians for column_of_interest
                 column_of_interest_counts = v_df[column_of_interest].value_counts().values
                 column_of_interest_counts = [str(x) for x in column_of_interest_counts.tolist()]
@@ -111,29 +113,32 @@ def plot_run_svd_all(data, columns_of_interest):
                 temp_bp.set(ylabel=f"V of {min_pval}", title=f"Boxplot of {column_of_interest}")
                 temp_bp.text(x=-0.3, y=v_df.iloc[:, 0].min() + -0.3, s=f"p={all_stats[min_pval]}", fontsize=10,
                              ha='center', va='bottom')
+                # Saving figure
+                temp_bp.figure.savefig(f"./Graphs/bp_{min_pval}_.png")
                 plt.show()
 
                 # plotting v
                 temp_v_heatmap = sns.heatmap(v[:, :], cmap=cmap, vmin=-0.15, vmax=0.15)
                 plt.title(f"V Transposed Matrix sorted by {column_of_interest}")
-                plt.show()
                 # Saving figure
                 temp_v_heatmap.figure.savefig(f"./Graphs/Heatmap_V_{column_of_interest}.png")
-
-                # Saving figure
-                temp_bp.figure.savefig(f"./Graphs/bp_{min_pval}_.png")
+                plt.show()
 
                 # Doing U magic
                 u_df = pd.DataFrame(u)
                 u_df["Genes"] = data.transpose().index[1:12043]
-                u_df.sort_values(by=int(row_number), ascending=False, inplace=True)
+                u_df.sort_values(by=row_number, ascending=False, inplace=True)
                 u_df.reset_index(inplace=True, drop=True)
-                sns.barplot(x=u_df[int(row_number)], y=u_df.index)
-                # .plot(u_df[int(row_number)], u_df.index)
+                u_df["temp_index"] = u_df.index
+                print(f"Generating and saving{column_of_interest} barplot")
+                sns.barplot(x=u_df[row_number], y=u_df.temp_index)
                 plt.title(f"Gene Expression of U sorted by column: {row_number}")
-                plt.savefig(f'./Graphs/U_sortedby_{row_number}_gene_expression.png', bbox_inches='tight')
+                plt.savefig(f'./Graphs/U_sorted_by_{row_number}_gene_expression.png', bbox_inches='tight')
+                print(f"Done saving barplot{column_of_interest}")
                 plt.show()
-                sorted_genes = u_df.Genes
+
+                sorted_genes = pd.DataFrame(u_df.Genes)
+                sorted_genes["Gene_Values"] = u_df.iloc[:, row_number]
                 sorted_genes.to_csv(f"./Sorted U genes/U_sorted_Row_{row_number}_{column_of_interest}.csv", index=False)
 
                 temp_u_heatmap = sns.heatmap(u[:, :], cmap=cmap, center=0)
@@ -145,6 +150,8 @@ def plot_run_svd_all(data, columns_of_interest):
             else:
                 multiple_unique.append(column_of_interest)
                 print(f"Error on {column_of_interest}")
+
+    print(f"{((i + 1) / len(columns_of_interest)) * 100}% complete")
 
     # Plotting sigma matrix
     plt.plot(s[1:])
